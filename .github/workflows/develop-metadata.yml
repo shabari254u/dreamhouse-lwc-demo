@@ -1,17 +1,19 @@
 name: MetaData Deployment on Develop branch
+
 on:
     workflow_dispatch:
     push:
         branches:
             - develop
         paths:
-            - 'force-app/**'          
+            - 'force-app/**'   
+                   
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: jawills/sf-deploy@v1.0
-        with:
-          SFDX_AUTH_URL: ${{ secrets.DEVHUB_SFDX_URL }}
-          DRY_RUN: false
+    validate:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: jawills/sf-deploy@v1.0
+          with:
+            SFDX_AUTH_URL: ${{ secrets.DEVHUB_SFDX_URL }}
+            DRY_RUN: false
