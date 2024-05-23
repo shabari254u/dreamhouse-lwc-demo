@@ -15,5 +15,3 @@ jobs:
         with:
           SFDX_AUTH_URL: ${{ secrets.DEVHUB_SFDX_URL }}
           DRY_RUN: false
-
-
