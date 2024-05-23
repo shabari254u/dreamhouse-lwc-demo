@@ -6,7 +6,7 @@ on:
         types: [closed]
         branches:
          - main
-
+         
 jobs:
     production-deployment:
         environment: prod
