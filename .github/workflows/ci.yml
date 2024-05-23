@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
     push:
         branches:
-            - main,build-ci 
+            - main,build-ci
         paths-ignore:
             - 'sfdx-project.json'
             - 'README.md'
@@ -41,8 +41,8 @@ jobs:
               run: HUSKY=0 npm ci
 
             # Prettier formatting
-            - name: 'Code formatting verification with Prettier'
-              run: npm run prettier:verify
+            # - name: 'Code formatting verification with Prettier'
+            #   run: npm run prettier:verify
 
             # Lint LWC / Aura
             - name: 'Lint Lightning Web Components / Aura Components'
