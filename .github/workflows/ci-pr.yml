@@ -209,6 +209,4 @@ jobs:
               uses: peter-evans/repository-dispatch@v3
               if: steps.checkForChanges.outputs.hasChanges == 'true'
               with:
-                  # token: ${{ secrets.BOT_ACCESS_TOKEN }}
                   event-type: start-packaging-pr
-                  # client-payload: '{ "ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "isPrelease": "${{ env.IS_PRERELEASE }}" }'

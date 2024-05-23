@@ -6,11 +6,6 @@ on:
     repository_dispatch:
         types: [start-packaging-pr]
 
-# Workflow environment variables
-# env:
-# Is the PR base branch a prerelease branch
-# IS_PRERELEASE: ${{ github.event.client_payload.isPrelease }}
-
 # Jobs to be executed
 jobs:
     packaging:
