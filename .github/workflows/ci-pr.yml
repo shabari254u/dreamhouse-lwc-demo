@@ -139,7 +139,7 @@ jobs:
               id: check_limits
               run: |
                   sfdx force:limits:api:display -u devhub --json > limits.json
-                  scratchOrgs=$(jq '.result | .find((limit) => limit.name == "DailyScratchOrgs")' limits.json)
+                  scratchOrgs=$(jq '.result[] | select(.name == "DailyScratchOrgs")' limits.json)
                   remaining=$(echo $scratchOrgs | jq '.remaining')
                   max=$(echo $scratchOrgs | jq '.max')
                   echo "Remaining: $remaining, Max: $max"
