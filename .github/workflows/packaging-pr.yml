@@ -8,8 +8,8 @@ on:
 
 # Workflow environment variables
 # env:
-    # Is the PR base branch a prerelease branch
-    # IS_PRERELEASE: ${{ github.event.client_payload.isPrelease }}
+# Is the PR base branch a prerelease branch
+# IS_PRERELEASE: ${{ github.event.client_payload.isPrelease }}
 
 # Jobs to be executed
 jobs:
