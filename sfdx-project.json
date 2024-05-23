@@ -2,16 +2,17 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true,
+      "default": false,
       "package": "DreamhouseLWC",
-      "versionName": "Spring '24",
-      "versionNumber": "60.0.0.NEXT"
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT",
+      "versionDescription": ""
     }
   ],
   "namespace": "",
   "sourceApiVersion": "60.0",
   "packageAliases": {
-    "DreamhouseLWC": "0Ho3h000000PBghCAG",
+    "DreamhouseLWC": "0Ho7y0000000AKLCA2",
     "DreamhouseLWC@59.0.0-1": "04t3h000001Rc2FAAS",
     "DreamhouseLWC@59.0.0-2": "04t3h000001Rc71AAC",
     "DreamhouseLWC@60.0.0-1": "04t3h000001RcBnAAK",
