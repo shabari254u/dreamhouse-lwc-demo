@@ -6,7 +6,7 @@ on:
         types: [closed]
         branches:
             - release/uat
-            
+
 jobs:
     uat-sandbox:
         environment: uat
