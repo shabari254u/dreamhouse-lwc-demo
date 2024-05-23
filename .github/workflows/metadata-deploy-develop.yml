@@ -1,21 +1,18 @@
-# Unique name for this workflow
-name: Metadata deployment on develop
+name: MetaData Deployment Develop
 
-# only trigger on pull request closed events
 on:
-    workflow_dispatch:
-    push:
-        branches:
-            - develop
-        paths:
-            - 'force-app/**'
-    jobs:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - name: Deploy on develop sandbox
-              uses: jawills/sf-deploy@v1.0
-              with:
-                  SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-                  DRY_RUN: false
-                  TEST_LEVEL: RunLocalTests
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'force-app/**'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate on develop
+        uses: jawills/sf-deploy@v1.0
+        with:
+          SFDX_AUTH_URL: ${{ secrets.DEVHUB_SFDX_URL }}
+          DRY_RUN: false
