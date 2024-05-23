@@ -2,7 +2,7 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": false,
+      "default": true,
       "package": "DreamhouseLWC",
       "versionName": "ver 0.1",
       "versionNumber": "0.1.0.NEXT",
