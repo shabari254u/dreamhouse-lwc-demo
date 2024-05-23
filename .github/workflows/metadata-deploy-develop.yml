@@ -1,11 +1,12 @@
 name: MetaData Deployment Develop
 
 on:
-  push:
-    branches:
-      - develop
+    workflow_dispatch:
+    push:
+        branches:
+          - develop
     paths:
-      - 'force-app/**'
+          - 'force-app/**'
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -16,3 +17,5 @@ jobs:
         with:
           SFDX_AUTH_URL: ${{ secrets.DEVHUB_SFDX_URL }}
           DRY_RUN: false
+
+
