@@ -1,10 +1,12 @@
 name: MetaData Deployment Develop
 on:
-  push:
-    branches:
-      - develop
-    paths:
-      - 'force-app/**'
+    workflow_dispatch:
+    push:
+        branches:
+            - develop
+        paths:
+            - 'force-app/**'
+            
 jobs:
   validate:
     runs-on: ubuntu-latest
