@@ -5,8 +5,7 @@ on:
         branches:
             - develop
         paths:
-            - 'force-app/**'
-            
+            - 'force-app/**'          
 jobs:
   validate:
     runs-on: ubuntu-latest
