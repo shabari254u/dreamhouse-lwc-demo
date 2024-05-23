@@ -6,8 +6,7 @@ on:
         types: [closed]
         branches:
             - master
-        paths:
-            - 'force-app/**'
+            
 jobs:
     merge_job:
         environment: prod
