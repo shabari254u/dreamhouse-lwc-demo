@@ -7,9 +7,9 @@ on:
         types: [start-packaging-pr]
 
 # Workflow environment variables
-env:
+# env:
     # Is the PR base branch a prerelease branch
-    IS_PRERELEASE: ${{ github.event.client_payload.isPrelease }}
+    # IS_PRERELEASE: ${{ github.event.client_payload.isPrelease }}
 
 # Jobs to be executed
 jobs:
@@ -68,18 +68,21 @@ jobs:
               run: sleep 360s
 
             # Create prerelease scratch org
-            - name: 'Create prerelease scratch org'
-              if: ${{ env.IS_PRERELEASE }}
-              run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1 --release=preview
+            # - name: 'Create prerelease scratch org'
+            #   if: ${{ env.IS_PRERELEASE }}
+            #   run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1 --release=preview
 
             # Create scratch org
             - name: 'Create scratch org'
-              if: ${{ !env.IS_PRERELEASE }}
+              # if: ${{ !env.IS_PRERELEASE }}
               run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1
 
             # Install new package in scratch org
             - name: 'Install new package version in scratch org'
               run: sf package install -p ${{ steps.createPackageVersion.outputs.packageVersionId }} -w 10 -o scratch-org -r
+
+            - name: 'Run Apex tests'
+              run: sf apex test run -c -r human -d ./tests/apex -w 20
 
             # Housekeeping
             - name: 'Delete scratch org'

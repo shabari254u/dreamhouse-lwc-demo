@@ -141,14 +141,15 @@ jobs:
                   hasChanges='false'
                   if [ $(echo "$changedPaths" | grep -c '^force-app') == 1 ]; then
                       hasChanges='true'
+                      echo "This package has changes"
                   fi
                   echo "hasChanges=$hasChanges" >> $GITHUB_OUTPUT
 
             # Trigger packaging workflow if needed
-            - name: 'Trigger packaging workflow if needed'
-              uses: peter-evans/repository-dispatch@v3
-              if: steps.checkForChanges.outputs.hasChanges == 'true'
-              with:
-                  token: ${{ secrets.BOT_ACCESS_TOKEN }}
-                  event-type: start-packaging
-                  client-payload: '{ "ref": "${{ github.ref }}", "sha": "${{ github.sha }}" }'
+            # - name: 'Trigger packaging workflow if needed'
+            #   uses: peter-evans/repository-dispatch@v3
+            #   if: steps.checkForChanges.outputs.hasChanges == 'true'
+            #   with:
+            #       token: ${{ secrets.BOT_ACCESS_TOKEN }}
+            #       event-type: start-packaging
+            #       client-payload: '{ "ref": "${{ github.ref }}", "sha": "${{ github.sha }}" }'
