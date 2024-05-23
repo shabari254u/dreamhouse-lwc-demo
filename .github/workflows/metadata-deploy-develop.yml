@@ -1,4 +1,4 @@
-name: MetaData Deployment Develop
+name: MetaData Deployment on Develop branch
 on:
     workflow_dispatch:
     push:
