@@ -10,11 +10,12 @@ on:
         paths:
             - force-app/**'
 jobs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Validate on develop
-        uses: jawills/sf-deploy@v1.0
-        with:
-          SFDX_AUTH_URL: ${{ secrets.DEVHUB_SFDX_URL }}
-          DRY_RUN: false
+    metadata-deployment:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: Validate on develop
+          uses: jawills/sf-deploy@v1.0
+          with:
+            SFDX_AUTH_URL: ${{ secrets.DEVHUB_SFDX_URL }}
+            DRY_RUN: false
