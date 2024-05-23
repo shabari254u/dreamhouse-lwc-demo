@@ -8,7 +8,7 @@ on:
          - main
 
 jobs:
-    merge_job:
+    production-deployment:
         environment: prod
         # this job will only run if the PR has been merged
         if: github.event.pull_request.merged == true
