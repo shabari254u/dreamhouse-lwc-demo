@@ -3,7 +3,7 @@ name: MetaData Deployment Develop
 on:
   pull_request:
     branches:
-      - master
+      - develop
     paths:
       - 'force-app/**'
 jobs:
