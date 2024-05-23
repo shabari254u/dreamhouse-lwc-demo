@@ -10,7 +10,7 @@ on:
       - develop
 
 jobs:
-  dev-sandbox:
+  develop-deployment:
     environment: dev
     # this job will only run if the PR has been merged
     if: github.event.pull_request.merged == true
