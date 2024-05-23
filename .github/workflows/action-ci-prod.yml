@@ -6,7 +6,7 @@ on:
         types: [closed]
         branches:
             - master
-            
+
 jobs:
     merge_job:
         environment: prod
