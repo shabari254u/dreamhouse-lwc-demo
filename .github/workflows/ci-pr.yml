@@ -4,15 +4,25 @@ name: CI on PR
 # Definition when the workflow should run
 on:
     workflow_dispatch:
+        inputs:
+            prerelease:
+                description: 'Run on a prerelease org?'
+                required: false
+                type: boolean
     pull_request:
         types: [opened, edited, synchronize, reopened]
+
+# Workflow environment variables
+env:
+    # Is the PR base branch a prerelease branch
+    IS_PRERELEASE: ${{ startsWith(github.event.pull_request.base.ref, 'prerelease/') || inputs.prerelease }}
 
 # Jobs to be executed
 jobs:
     # Dummy job used to skip CI run on automated PRs
     skip-ci:
         if: github.actor == 'trailheadapps-bot'
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         steps:
             - name: Noop
               run: |
@@ -24,7 +34,7 @@ jobs:
     dependabot-auto-merge:
         # Only run for Dependabot PRs
         if: github.actor == 'dependabot[bot]'
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         needs: format-lint-lwc-tests
         permissions:
             pull-requests: write
@@ -58,7 +68,7 @@ jobs:
     # Formatting and linting only runs on human-submitted PRs
     format-lint-lwc-tests:
         if: github.actor != 'trailheadapps-bot'
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         steps:
             # Checkout the source code
             - name: 'Checkout source code'
@@ -104,7 +114,7 @@ jobs:
                   flags: LWC
 
     scratch-org-test:
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         needs: format-lint-lwc-tests
         if: github.actor != 'dependabot[bot]'
         steps:
@@ -174,7 +184,7 @@ jobs:
               run: sf org delete scratch -p -o scratch-org
 
     trigger-packaging:
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         needs: scratch-org-test
         steps:
             # Checkout the source code
@@ -191,6 +201,14 @@ jobs:
                   hasChanges='false'
                   if [ $(echo "$changedPaths" | grep -c '^force-app') == 1 ]; then
                       hasChanges='true'
-                      echo "This package has changes"
                   fi
                   echo "hasChanges=$hasChanges" >> $GITHUB_OUTPUT
+
+            # Trigger packaging PR workflow
+            - name: 'Trigger packaging PR workflow if needed'
+              uses: peter-evans/repository-dispatch@v3
+              if: steps.checkForChanges.outputs.hasChanges == 'true'
+              with:
+                  token: ${{ secrets.BOT_ACCESS_TOKEN }}
+                  event-type: start-packaging-pr
+                  client-payload: '{ "ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "isPrelease": "${{ env.IS_PRERELEASE }}" }'

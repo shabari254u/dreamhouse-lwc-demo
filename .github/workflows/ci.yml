@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
     push:
         branches:
-            - main,build-ci
+            - main
         paths-ignore:
             - 'sfdx-project.json'
             - 'README.md'
@@ -14,7 +14,7 @@ on:
 # Jobs to be executed
 jobs:
     format-lint-lwc-tests:
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         steps:
             # Checkout the source code
             - name: 'Checkout source code'
@@ -60,7 +60,7 @@ jobs:
                   flags: LWC
 
     scratch-org-test:
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         needs: format-lint-lwc-tests
         if: github.actor != 'dependabot[bot]'
         steps:
@@ -124,7 +124,7 @@ jobs:
               run: sf org delete scratch -p -o scratch-org
 
     trigger-packaging:
-        runs-on: ubuntu-latest
+        runs-on: trailheadapps-Ubuntu
         needs: scratch-org-test
         steps:
             # Checkout the source code
@@ -141,6 +141,14 @@ jobs:
                   hasChanges='false'
                   if [ $(echo "$changedPaths" | grep -c '^force-app') == 1 ]; then
                       hasChanges='true'
-                      echo "This package has changes"
                   fi
                   echo "hasChanges=$hasChanges" >> $GITHUB_OUTPUT
+
+            # Trigger packaging workflow if needed
+            - name: 'Trigger packaging workflow if needed'
+              uses: peter-evans/repository-dispatch@v3
+              if: steps.checkForChanges.outputs.hasChanges == 'true'
+              with:
+                  token: ${{ secrets.BOT_ACCESS_TOKEN }}
+                  event-type: start-packaging
+                  client-payload: '{ "ref": "${{ github.ref }}", "sha": "${{ github.sha }}" }'
