@@ -8,7 +8,7 @@ on:
             - release/uat
 
 jobs:
-    uat-sandbox:
+    uat-deployment:
         environment: uat
         # this job will only run if the PR has been merged
         if: github.event.pull_request.merged == true
