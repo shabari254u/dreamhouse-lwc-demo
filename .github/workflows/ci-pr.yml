@@ -135,15 +135,40 @@ jobs:
             - name: 'Authenticate Dev Hub'
               run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a devhub -d
 
-            # Create prerelease scratch org
-            - name: 'Create prerelease scratch org'
-              if: ${{ env.IS_PRERELEASE }}
-              run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1 --release=preview
+            - name: 'Check scratch org limits'
+              id: check_limits
+              run: |
+                  sfdx force:limits:api:display -u devhub --json > limits.json
+                  scratchOrgs=$(jq '.result | .find((limit) => limit.name == "DailyScratchOrgs")' limits.json)
+                  remaining=$(echo $scratchOrgs | jq '.remaining')
+                  max=$(echo $scratchOrgs | jq '.max')
+                  echo "Remaining: $remaining, Max: $max"
+                  echo "remaining=$remaining" >> $GITHUB_ENV
+                  echo "max=$max" >> $GITHUB_ENV
+
+            - name: 'List active scratch orgs'
+              id: list_active_orgs
+              run: |
+                  sfdx force:org:list --json > orgList.json
+                  activeOrgs=$(jq -r '.result.scratchOrgs[] | select(.status == "Deleted") | .alias' orgList.json)
+                  echo "activeOrgs=$activeOrgs" >> $GITHUB_ENV
+
+            - name: 'Create or use existing scratch org'
+              id: create_or_use_scratch_org
+              run: |
+                  if [ ${{ env.remaining }} -gt 0 ]; then
+                      echo "Creating scratch org"
+                      sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1
+                  else
+                      echo "Using existing active scratch org"
+                      existingOrg=$(echo "${{ env.activeOrgs }}" | head -n 1)
+                      echo "Using existing org: $existingOrg"
+                      echo "SFDX_ALIAS=$existingOrg" >> $GITHUB_ENV
+                  fi
 
             # Create scratch org
-            - name: 'Create scratch org'
-              if: ${{ !env.IS_PRERELEASE }}
-              run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1
+            # - name: 'Create scratch org'
+            #   run: sf org create scratch -f config/project-scratch-def.json -a scratch-org -d -y 1
 
             # Deploy source to scratch org
             - name: 'Push source to scratch org'
