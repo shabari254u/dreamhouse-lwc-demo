@@ -4,18 +4,8 @@ name: CI on PR
 # Definition when the workflow should run
 on:
     workflow_dispatch:
-        inputs:
-            prerelease:
-                description: 'Run on a prerelease org?'
-                required: false
-                type: boolean
     pull_request:
         types: [opened, edited, synchronize, reopened]
-
-# Workflow environment variables
-env:
-    # Is the PR base branch a prerelease branch
-    IS_PRERELEASE: ${{ startsWith(github.event.pull_request.base.ref, 'prerelease/') || inputs.prerelease }}
 
 # Jobs to be executed
 jobs:
@@ -201,12 +191,7 @@ jobs:
                   hasChanges='false'
                   if [ $(echo "$changedPaths" | grep -c '^force-app') == 1 ]; then
                       hasChanges='true'
+                      echo "This package has changes"
                   fi
                   echo "hasChanges=$hasChanges" >> $GITHUB_OUTPUT
 
-            # Trigger packaging PR workflow
-            - name: 'Trigger packaging PR workflow if needed'
-              uses: peter-evans/repository-dispatch@v3
-              if: steps.checkForChanges.outputs.hasChanges == 'true'
-              with:
-                  event-type: start-packaging-pr
