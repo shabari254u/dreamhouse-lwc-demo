@@ -6,8 +6,7 @@ on:
         types: [closed]
         branches:
             - release/uat
-        paths:
-            - 'force-app/**'
+
 jobs:
     uat-sandbox:
         environment: uat
