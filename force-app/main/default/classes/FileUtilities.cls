@@ -1,4 +1,3 @@
-// Adding comments for CI
 public with sharing class FileUtilities {
     @AuraEnabled
     public static String createFile(
