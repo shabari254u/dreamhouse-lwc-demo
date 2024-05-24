@@ -5,8 +5,8 @@ on:
     pull_request:
         types: [closed]
         branches:
-         - main
-         
+            - main
+
 jobs:
     production-deployment:
         environment: prod
