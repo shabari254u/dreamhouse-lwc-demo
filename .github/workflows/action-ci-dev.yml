@@ -2,6 +2,7 @@ name: ci for dev env
 
 # only trigger on pull request closed events on develop branch
 on:
+    workflow_dispatch:
     pull_request:
         types: [closed]
         branches:
