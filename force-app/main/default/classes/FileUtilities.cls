@@ -27,7 +27,7 @@ public with sharing class FileUtilities {
 
             return contentDocumentLink.Id;
         } catch (Exception e) {
-            throw new AuraHandledException('Error creating file: ' + e);
+            throw new AuraHandledException('Error creating files: ' + e);
         }
     }
 }
