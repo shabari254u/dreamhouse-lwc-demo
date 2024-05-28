@@ -194,3 +194,4 @@ jobs:
                       echo "This package has changes"
                   fi
                   echo "hasChanges=$hasChanges" >> $GITHUB_OUTPUT
+                  echo "This package doesnt has changes"
